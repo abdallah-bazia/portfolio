@@ -1,0 +1,33 @@
+
+---
+
+## Database Structure
+1. **personne**: Stores user information  
+   - `mail` (Primary Key)  
+   - `nom`  
+   - `prenom`  
+   - `ville`  
+
+2. **sport**: Stores sports names  
+   - `id_sport` (Primary Key)  
+   - `nom_s`  
+
+3. **pratique**: Stores user-sport relationships  
+   - `mail` (Foreign Key to personne)  
+   - `id_sport` (Foreign Key to sport)  
+   - `niveau` (Beginner, Confirmed, Pro, Supporter)  
+
+---
+
+## What I Learned
+- **PHP and MySQL integration**: Executing queries, prepared statements, and handling database results.  
+- **Form handling and validation**: Capturing user input and processing POST requests securely.  
+- **Dynamic content rendering**: Displaying search results with conditional formatting.  
+- **Basic web app structure**: Organizing files for login, registration, and search functionality.  
+
+---
+
+## Usage
+1. Clone this repository:  
+```bash
+git clone https://github.com/abdallah-bazia/sport-meetings-portal.git
