@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<p>Si vous voulez vous inscrire dans un nouveau sport, <a href='inscripsiton.php'>inscrivez-vous maintenant </a>.</p>";
     }
      else {
-        // Email does not exist in the database, redirect to inscription.php
+        // Email  not exist in the database, redirect to inscription.php
         header("Location: inscripsiton.php");
         exit; // Stop further execution
     }

@@ -8,7 +8,7 @@ return $base;
 }
 ?>
   <?php
-    // Include the file containing the database connection function
+    // include the file containing the database connection function
     include 'connexion.php';
 
     // Call the function to establish a database connection

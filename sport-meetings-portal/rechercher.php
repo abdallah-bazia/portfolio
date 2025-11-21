@@ -14,7 +14,7 @@
             display: flex;
             justify-content: left; /* Horizontally align content */
             align-items: center; /* Vertically align content */
-            height: 100vh; /* Full viewport height */
+            height: 100vh; /* Ful viewport height */
         }
 
         h1 {

@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $conn->query($sql);
 
     if ($result === false) {
-        // Handle SQL query error
+        // Handle SQL query eror
         die("Erreur lors de l'exécution de la requête : " . $conn->error);
     }
 
