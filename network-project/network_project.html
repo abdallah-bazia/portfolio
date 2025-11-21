@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSPF Network Topology Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .topology-diagram {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .device {
+            position: absolute;
+            background: white;
+            border: 2px solid #1e3c72;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .device:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .device.router {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .device.switch {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .device.pc {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .device-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .device-ip {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: #1e3c72;
+            transform-origin: left center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .ip-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .ip-table th {
+            background: #1e3c72;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .ip-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ip-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        button.btn {
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button.btn:active {
+            transform: translateY(0);
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .topology-diagram {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 OSPF Network Topology Project</h1>
+            <p class="subtitle">Multi-Router Network with Dynamic Routing Protocol</p>
+        </header>
+
+        <div class="content">
+            <!-- Project Overview -->
+            <div class="section">
+                <h2 class="section-title">📋 Project Overview</h2>
+                <p>This project demonstrates a complete OSPF (Open Shortest Path First) network implementation featuring three routers in a triangle topology, providing redundant paths and automatic route failover capabilities.</p>
+                
+                <div style="margin-top: 20px;">
+                    <span class="tech-badge">OSPF Routing</span>
+                    <span class="tech-badge">Huawei eNSP</span>
+                    <span class="tech-badge">Cisco Packet Tracer</span>
+                    <span class="tech-badge">IPv4 Subnetting</span>
+                    <span class="tech-badge">VLANs</span>
+                </div>
+            </div>
+
+            <!-- Network Topology Diagram -->
+            <div class="section">
+                <h2 class="section-title">🗺️ Network Topology</h2>
+                <div class="topology-diagram">
+                    <!-- Routers -->
+                    <div class="device router" style="left: 100px; top: 200px;">
+                        <div class="device-name">AR1</div>
+                        <div class="device-ip">Core Router</div>
+                    </div>
+                    
+                    <div class="device router" style="left: 400px; top: 50px;">
+                        <div class="device-name">AR2</div>
+                        <div class="device-ip">Distribution</div>
+                    </div>
+                    
+                    <div class="device router" style="left: 500px; top: 250px;">
+                        <div class="device-name">AR3</div>
+                        <div class="device-ip">Distribution</div>
+                    </div>
+
+                    <!-- Switches -->
+                    <div class="device switch" style="left: 50px; top: 350px;">
+                        <div class="device-name">LSW1</div>
+                        <div class="device-ip">Access Switch</div>
+                    </div>
+                    
+                    <div class="device switch" style="left: 350px; top: 10px;">
+                        <div class="device-name">LSW2</div>
+                        <div class="device-ip">Access Switch</div>
+                    </div>
+                    
+                    <div class="device switch" style="left: 550px; top: 380px;">
+                        <div class="device-name">LSW3</div>
+                        <div class="device-ip">Access Switch</div>
+                    </div>
+
+                    <!-- PCs -->
+                    <div class="device pc" style="left: 10px; top: 450px;">
+                        <div class="device-name">PC1</div>
+                        <div class="device-ip">172.16.1.20</div>
+                    </div>
+                    
+                    <div class="device pc" style="left: 300px; top: -50px;">
+                        <div class="device-name">PC3</div>
+                        <div class="device-ip">10.10.10.10</div>
+                    </div>
+                    
+                    <div class="device pc" style="left: 650px; top: 450px;">
+                        <div class="device-name">PC2</div>
+                        <div class="device-ip">172.16.1.35</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IP Addressing Scheme -->
+            <div class="section">
+                <h2 class="section-title">📡 IP Addressing Scheme</h2>
+                <table class="ip-table">
+                    <thead>
+                        <tr>
+                            <th>Network Segment</th>
+                            <th>IP Range</th>
+                            <th>Subnet Mask</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>PC1 Network</strong></td>
+                            <td>172.16.1.16/28</td>
+                            <td>255.255.255.240</td>
+                            <td>End user network (14 hosts)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PC2 Network</strong></td>
+                            <td>172.16.1.32/29</td>
+                            <td>255.255.255.248</td>
+                            <td>End user network (6 hosts)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PC3 Network</strong></td>
+                            <td>10.10.10.0/24</td>
+                            <td>255.255.255.0</td>
+                            <td>Management network</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AR1-AR2 Link</strong></td>
+                            <td>192.168.10.0/30</td>
+                            <td>255.255.255.252</td>
+                            <td>Point-to-point (2 hosts)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AR1-AR3 Link</strong></td>
+                            <td>192.168.10.4/30</td>
+                            <td>255.255.255.252</td>
+                            <td>Point-to-point (2 hosts)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AR2-AR3 Link</strong></td>
+                            <td>192.168.10.8/30</td>
+                            <td>255.255.255.252</td>
+                            <td>Point-to-point (2 hosts)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Key Features -->
+            <div class="section">
+                <h2 class="section-title">✨ Key Features</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-title">🔄 Dynamic Routing</div>
+                        <p>OSPF protocol automatically calculates the best path and provides immediate failover in case of link failure.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">🔒 Network Segmentation</div>
+                        <p>Efficient IP subnetting using VLSM (Variable Length Subnet Masking) for optimal address utilization.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">⚡ Redundancy</div>
+                        <p>Triangle router topology ensures network availability even if one link fails.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">📊 Scalability</div>
+                        <p>Hierarchical design allows for easy expansion of the network infrastructure.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Details -->
+            <div class="section">
+                <h2 class="section-title">⚙️ Technical Implementation</h2>
+                <div class="card">
+                    <h3 style="color: #1e3c72; margin-bottom: 15px;">OSPF Configuration Highlights</h3>
+                    <ul style="line-height: 2;">
+                        <li><strong>OSPF Process ID:</strong> Single area design (Area 0)</li>
+                        <li><strong>Router IDs:</strong> Manually configured for consistency</li>
+                        <li><strong>Network Types:</strong> Point-to-point for router links, broadcast for LAN segments</li>
+                        <li><strong>Cost Metric:</strong> Based on interface bandwidth</li>
+                        <li><strong>Authentication:</strong> MD5 authentication on router links (recommended)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Equipment Used -->
+            <div class="section">
+                <h2 class="section-title">🔧 Equipment & Tools</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-title">Routers</div>
+                        <p><strong>Model:</strong> AR2240 (Huawei)<br>
+                        <strong>Count:</strong> 3 units<br>
+                        <strong>Interfaces:</strong> GE, Serial</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Switches</div>
+                        <p><strong>Model:</strong> S5700 (Huawei)<br>
+                        <strong>Count:</strong> 3 units<br>
+                        <strong>Ports:</strong> 24x GE ports</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Simulation Tools</div>
+                        <p>• Huawei eNSP<br>
+                        • Cisco Packet Tracer<br>
+                        • Wireshark (for analysis)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testing & Verification -->
+            <div class="section">
+                <h2 class="section-title">✅ Testing & Verification</h2>
+                <div class="card">
+                    <h3 style="color: #1e3c72; margin-bottom: 15px;">Verification Commands</h3>
+                    <p><code>display ospf peer</code> - Verify OSPF neighbor relationships</p>
+                    <p><code>display ip routing-table</code> - View routing table entries</p>
+                    <p><code>display ospf routing</code> - Check OSPF learned routes</p>
+                    <p><code>ping</code> - Test end-to-end connectivity</p>
+                    <p><code>traceroute</code> - Verify routing paths</p>
+                </div>
+            </div>
+
+            <!-- Download Section -->
+            <div class="download-section">
+                <h2 style="margin-bottom: 20px;">📥 Project Files</h2>
+                <p style="margin-bottom: 20px;">Complete network topology files available for download</p>
+                <button onclick="downloadTopoFile()" class="btn">📄 Download Huawei eNSP Topology (.topo)</button>
+                <button onclick="downloadPktFile()" class="btn">📄 Download Cisco Packet Tracer (.pkt)</button>
+                <button onclick="downloadDocumentation()" class="btn">📋 Download Configuration Guide (TXT)</button>
+                <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.9;">
+                    ℹ️ Files are ready for use in Huawei eNSP and Cisco Packet Tracer
+                </p>
+            </div>
+
+            <!-- Learning Outcomes -->
+            <div class="section">
+                <h2 class="section-title">🎓 Learning Outcomes</h2>
+                <div class="grid">
+                    <div class="card">
+                        <p>✓ OSPF routing protocol configuration and troubleshooting</p>
+                    </div>
+                    <div class="card">
+                        <p>✓ Advanced IP subnetting and VLSM implementation</p>
+                    </div>
+                    <div class="card">
+                        <p>✓ Network design principles and best practices</p>
+                    </div>
+                    <div class="card">
+                        <p>✓ Redundancy and fault tolerance concepts</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="text-align: center; padding: 30px; color: #666; border-top: 2px solid #eee; margin-top: 40px;">
+                <p><strong>Portfolio Project</strong> | Network Engineering | 2025</p>
+                <p style="margin-top: 10px;">Created with: Huawei eNSP & Cisco Packet Tracer</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Huawei eNSP Topology File Content
+        const topoFileContent = `<?xml version="1.0" encoding="UNICODE" ?>
+<topo version="1.3.00.100">
+    <devices>
+        <dev id="F607B8F0-A746-468c-B58A-88446ED4375B" name="LSW3" poe="0" model="S5700" settings="" system_mac="4C-1F-CC-61-02-D1" com_port="2005" bootmode="0" cx="852.000000" cy="507.000000" edit_left="879" edit_top="561">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="24" />
+            </slot>
+        </dev>
+        <dev id="E4692DA6-7519-4e7c-92A4-EDEE40590F65" name="LSW1" poe="0" model="S5700" settings="" system_mac="4C-1F-CC-F8-11-87" com_port="2003" bootmode="0" cx="292.000000" cy="499.000000" edit_left="319" edit_top="553">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="24" />
+            </slot>
+        </dev>
+        <dev id="E049A286-6FDF-4bce-9DB5-EC821196134D" name="LSW2" poe="0" model="S5700" settings="" system_mac="4C-1F-CC-CC-63-B7" com_port="2004" bootmode="0" cx="513.000000" cy="65.000000" edit_left="540" edit_top="119">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="24" />
+            </slot>
+        </dev>
+        <dev id="FD989600-DABF-4e38-AAC0-EB03E8637573" name="PC1" poe="0" model="PC" settings=" -simpc_ip 172.16.1.20  -simpc_mask 255.255.255.240  -simpc_gateway 172.16.1.17  -simpc_mac 54-89-98-72-39-C6  -simpc_mc_dstip 0.0.0.0  -simpc_mc_dstmac 00-00-00-00-00-00  -simpc_dns1 0.0.0.0  -simpc_dns2 0.0.0.0  -simpc_ipv6 ::  -simpc_prefix 128  -simpc_gatewayv6 ::  -simpc_dhcp_state 0  -simpc_dhcpv6_state 0  -simpc_dns_auto_state 0  -simpc_igmp_version 1  -simpc_group_ip_start 0.0.0.0  -simpc_src_ip_start 0.0.0.0  -simpc_group_num 0  -simpc_group_step 0  -simpc_src_num 0  -simpc_src_step 0  -simpc_type MODE_IS_INCLUDE " system_mac="54-89-98-72-39-C6" com_port="0" bootmode="0" cx="126.000000" cy="503.000000" edit_left="153" edit_top="557">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="Ethernet" count="1" />
+            </slot>
+        </dev>
+        <dev id="3AB5F391-B876-419f-BAAD-ED0BC20202FC" name="PC3" poe="0" model="PC" settings=" -simpc_ip 10.10.10.10  -simpc_mask 255.255.255.0  -simpc_gateway 10.10.10.1  -simpc_mac 54-89-98-98-64-10  -simpc_mc_dstip 0.0.0.0  -simpc_mc_dstmac 00-00-00-00-00-00  -simpc_dns1 0.0.0.0  -simpc_dns2 0.0.0.0  -simpc_ipv6 ::  -simpc_prefix 128  -simpc_gatewayv6 ::  -simpc_dhcp_state 0  -simpc_dhcpv6_state 0  -simpc_dns_auto_state 0  -simpc_igmp_version 1  -simpc_group_ip_start 0.0.0.0  -simpc_src_ip_start 0.0.0.0  -simpc_group_num 0  -simpc_group_step 0  -simpc_src_num 0  -simpc_src_step 0  -simpc_type MODE_IS_INCLUDE " system_mac="54-89-98-98-64-10" com_port="0" bootmode="0" cx="317.000000" cy="65.000000" edit_left="344" edit_top="119">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="Ethernet" count="1" />
+            </slot>
+        </dev>
+        <dev id="EBD9C90B-BC97-48c5-A1F5-2C9E5B559F54" name="PC2" poe="0" model="PC" settings=" -simpc_ip 172.16.1.35  -simpc_mask 255.255.255.248  -simpc_gateway 172.16.1.33  -simpc_mac 54-89-98-47-0B-F7  -simpc_mc_dstip 0.0.0.0  -simpc_mc_dstmac 00-00-00-00-00-00  -simpc_dns1 0.0.0.0  -simpc_dns2 0.0.0.0  -simpc_ipv6 ::  -simpc_prefix 128  -simpc_gatewayv6 ::  -simpc_dhcp_state 0  -simpc_dhcpv6_state 0  -simpc_dns_auto_state 0  -simpc_igmp_version 1  -simpc_group_ip_start 0.0.0.0  -simpc_src_ip_start 0.0.0.0  -simpc_group_num 0  -simpc_group_step 0  -simpc_src_num 0  -simpc_src_step 0  -simpc_type MODE_IS_INCLUDE " system_mac="54-89-98-47-0B-F7" com_port="0" bootmode="0" cx="1064.000000" cy="512.000000" edit_left="1091" edit_top="566">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="Ethernet" count="1" />
+            </slot>
+        </dev>
+        <dev id="8ABF7289-36C3-4928-AAC7-EAE88EEB1888" name="AR3" poe="0" model="AR2240" settings="" system_mac="00-E0-FC-DB-10-2B" com_port="2002" bootmode="0" cx="702.000000" cy="364.000000" edit_left="729" edit_top="418">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="1" />
+                <interface sztype="Ethernet" interfacename="GE" count="2" />
+                <interface sztype="Serial" interfacename="Serial" count="2" />
+                <interface sztype="Serial" interfacename="E1" count="2" />
+                <interface sztype="Serial" interfacename="E1" count="2" />
+            </slot>
+            <slot isMainBoard="0" id="1" type="521" />
+            <slot isMainBoard="0" id="2" type="516" />
+            <slot isMainBoard="0" id="3" type="516" />
+        </dev>
+        <dev id="D7DB9673-5A33-43c0-A897-A7A0C33C7CA9" name="AR1" poe="0" model="AR2240" settings="" system_mac="00-E0-FC-82-05-22" com_port="2000" bootmode="0" cx="437.000000" cy="361.000000" edit_left="464" edit_top="415">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="1" />
+                <interface sztype="Ethernet" interfacename="GE" count="2" />
+                <interface sztype="Serial" interfacename="Serial" count="2" />
+                <interface sztype="Serial" interfacename="E1" count="2" />
+                <interface sztype="Serial" interfacename="E1" count="2" />
+            </slot>
+            <slot isMainBoard="0" id="1" type="521" />
+            <slot isMainBoard="0" id="2" type="516" />
+            <slot isMainBoard="0" id="3" type="516" />
+        </dev>
+        <dev id="96DD7BC0-A088-4db4-B4A9-6A2A18CF49B5" name="AR2" poe="0" model="AR2240" settings="" system_mac="00-E0-FC-F7-0B-5F" com_port="2001" bootmode="0" cx="577.000000" cy="171.000000" edit_left="604" edit_top="225">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="1" />
+                <interface sztype="Ethernet" interfacename="GE" count="2" />
+                <interface sztype="Serial" interfacename="Serial" count="2" />
+                <interface sztype="Serial" interfacename="E1" count="2" />
+                <interface sztype="Serial" interfacename="E1" count="2" />
+            </slot>
+            <slot isMainBoard="0" id="1" type="521" />
+            <slot isMainBoard="0" id="2" type="516" />
+            <slot isMainBoard="0" id="3" type="516" />
+        </dev>
+    </devices>
+    <lines>
+        <line srcDeviceID="D7DB9673-5A33-43c0-A897-A7A0C33C7CA9" destDeviceID="E4692DA6-7519-4e7c-92A4-EDEE40590F65">
+            <interfacePair lineName="Copper" srcIndex="0" srcBoundRectIsMoved="0" srcBoundRect_X="432.718750" srcBoundRect_Y="417.771118" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="350.281250" tarBoundRect_Y="496.228882" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="E4692DA6-7519-4e7c-92A4-EDEE40590F65" destDeviceID="FD989600-DABF-4e38-AAC0-EB03E8637573">
+            <interfacePair lineName="Copper" srcIndex="1" srcBoundRectIsMoved="0" srcBoundRect_X="275.828766" srcBoundRect_Y="527.040283" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="196.171234" tarBoundRect_Y="528.959717" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="8ABF7289-36C3-4928-AAC7-EAE88EEB1888" destDeviceID="F607B8F0-A746-468c-B58A-88446ED4375B">
+            <interfacePair lineName="Copper" srcIndex="0" srcBoundRectIsMoved="0" srcBoundRect_X="760.256104" srcBoundRect_Y="420.797516" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="847.743896" tarBoundRect_Y="504.202484" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="F607B8F0-A746-468c-B58A-88446ED4375B" destDeviceID="EBD9C90B-BC97-48c5-A1F5-2C9E5B559F54">
+            <interfacePair lineName="Copper" srcIndex="1" srcBoundRectIsMoved="0" srcBoundRect_X="922.171753" srcBoundRect_Y="535.018188" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="1047.828247" tarBoundRect_Y="537.981812" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="96DD7BC0-A088-4db4-B4A9-6A2A18CF49B5" destDeviceID="E049A286-6FDF-4bce-9DB5-EC821196134D">
+            <interfacePair lineName="Copper" srcIndex="0" srcBoundRectIsMoved="0" srcBoundRect_X="581.679626" srcBoundRect_Y="161.031906" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="562.320374" tarBoundRect_Y="128.968094" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="E049A286-6FDF-4bce-9DB5-EC821196134D" destDeviceID="3AB5F391-B876-419f-BAAD-ED0BC20202FC">
+            <interfacePair lineName="Copper" srcIndex="1" srcBoundRectIsMoved="0" srcBoundRect_X="496.816223" srcBoundRect_Y="92.000000" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="387.183777" tarBoundRect_Y="92.000000" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="D7DB9673-5A33-43c0-A897-A7A0C33C7CA9" destDeviceID="96DD7BC0-A088-4db4-B4A9-6A2A18CF49B5">
+            <interfacePair lineName="Serial" srcIndex="3" srcBoundRectIsMoved="0" srcBoundRect_X="489.616577" srcBoundRect_Y="353.234650" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="3" tarBoundRectIsMoved="0" tarBoundRect_X="578.383423" tarBoundRect_Y="232.765350" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="D7DB9673-5A33-43c0-A897-A7A0C33C7CA9" destDeviceID="8ABF7289-36C3-4928-AAC7-EAE88EEB1888">
+            <interfacePair lineName="Serial" srcIndex="4" srcBoundRectIsMoved="0" srcBoundRect_X="507.181000" srcBoundRect_Y="388.488831" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="3" tarBoundRectIsMoved="0" tarBoundRect_X="685.819031" tarBoundRect_Y="390.511169" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+        <line srcDeviceID="96DD7BC0-A088-4db4-B4A9-6A2A18CF49B5" destDeviceID="8ABF7289-36C3-4928-AAC7-EAE88EEB1888">
+            <interfacePair lineName="Serial" srcIndex="4" srcBoundRectIsMoved="0" srcBoundRect_X="627.475220" srcBoundRect_Y="234.245728" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="4" tarBoundRectIsMoved="0" tarBoundRect_X="705.524780" tarBoundRect_Y="354.754272" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+    </lines>
+    <shapes />
+    <txttips>
+        <txttip left="383" top="54" right="493" bottom="71" content="10.10.10.0 /24" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+        <txttip left="710" top="278" right="835" bottom="295" content="192.168.10.8 /30" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+        <txttip left="368" top="275" right="493" bottom="292" content="192.168.10.0 /30" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+        <txttip left="518" top="438" right="643" bottom="455" content="192.168.10.4 /30" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+        <txttip left="190" top="570" right="307" bottom="587" content="172.16.1.16 /28" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+        <txttip left="925" top="567" right="1042" bottom="584" content="172.16.1.32 /29" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+    </txttips>
+</topo>`;
+
+        // Configuration Guide Content
+        const configGuide = `OSPF NETWORK CONFIGURATION GUIDE
+================================
+
+Project: OSPF Multi-Router Network Topology
+Author: Network Engineering Portfolio Project
+Date: 2025
+
+NETWORK OVERVIEW
+---------------
+This network implements OSPF (Open Shortest Path First) routing protocol
+across three routers (AR1, AR2, AR3) in a triangle topology, providing
+redundant paths and automatic failover capabilities.
+
+TOPOLOGY SUMMARY
+---------------
+- 3x Routers: AR1, AR2, AR3 (Huawei AR2240)
+- 3x Switches: LSW1, LSW2, LSW3 (Huawei S5700)
+- 3x End Devices: PC1, PC2, PC3
+
+IP ADDRESSING SCHEME
+-------------------
+Network Segments:
+1. PC1 Network: 172.16.1.16/28 (255.255.255.240)
+   - Gateway: 172.16.1.17
+   - PC1 IP: 172.16.1.20
+   - Usable hosts: 14
+
+2. PC2 Network: 172.16.1.32/29 (255.255.255.248)
+   - Gateway: 172.16.1.33
+   - PC2 IP: 172.16.1.35
+   - Usable hosts: 6
+
+3. PC3 Network: 10.10.10.0/24 (255.255.255.0)
+   - Gateway: 10.10.10.1
+   - PC3 IP: 10.10.10.10
+   - Usable hosts: 254
+
+Point-to-Point Links:
+1. AR1-AR2: 192.168.10.0/30
+   - AR1: 192.168.10.1
+   - AR2: 192.168.10.2
+
+2. AR1-AR3: 192.168.10.4/30
+   - AR1: 192.168.10.5
+   - AR3: 192.168.10.6
+
+3. AR2-AR3: 192.168.10.8/30
+   - AR2: 192.168.10.9
+   - AR3: 192.168.10.10
+
+BASIC OSPF CONFIGURATION (Huawei)
+---------------------------------
+
+Router AR1:
+----------
+system-view
+sysname AR1
+#
+interface GigabitEthernet0/0/0
+ ip address 172.16.1.17 255.255.255.240
+ ospf enable 1 area 0.0.0.0
+#
+interface Serial4/0/0
+ ip address 192.168.10.1 255.255.255.252
+ ospf enable 1 area 0.0.0.0
+#
+interface Serial4/0/1
+ ip address 192.168.10.5 255.255.255.252
+ ospf enable 1 area 0.0.0.0
+#
+ospf 1 router-id 1.1.1.1
+ area 0.0.0.0
+#
+
+Router AR2:
+----------
+system-view
+sysname AR2
+#
+interface GigabitEthernet0/0/0
+ ip address 10.10.10.1 255.255.255.0
+ ospf enable 1 area 0.0.0.0
+#
+interface Serial4/0/0
+ ip address 192.168.10.2 255.255.255.252
+ ospf enable 1 area 0.0.0.0
+#
+interface Serial4/0/1
+ ip address 192.168.10.9 255.255.255.252
+ ospf enable 1 area 0.0.0.0
+#
+ospf 1 router-id 2.2.2.2
+ area 0.0.0.0
+#
+
+Router AR3:
+----------
+system-view
+sysname AR3
+#
+interface GigabitEthernet0/0/0
+ ip address 172.16.1.33 255.255.255.248
+ ospf enable 1 area 0.0.0.0
+#
+interface Serial4/0/0
+ ip address 192.168.10.6 255.255.255.252
+ ospf enable 1 area 0.0.0.0
+#
+interface Serial4/0/1
+ ip address 192.168.10.10 255.255.255.252
+ ospf enable 1 area 0.0.0.0
+#
+ospf 1 router-id 3.3.3.3
+ area 0.0.0.0
+#
+
+VERIFICATION COMMANDS
+--------------------
+1. Check OSPF neighbors:
+   display ospf peer
+
+2. View routing table:
+   display ip routing-table
+
+3. Check OSPF routes:
+   display ospf routing
+
+4. Test connectivity:
+   ping [destination-ip]
+   tracert [destination-ip]
+
+5. View OSPF interface info:
+   display ospf interface
+
+6. Check OSPF database:
+   display ospf lsdb
+
+TESTING PROCEDURES
+-----------------
+1. Verify all OSPF neighbors are in FULL state
+2. Ping from PC1 to PC2 and PC3
+3. Check routing tables on all routers
+4. Simulate link failure (shutdown interface)
+5. Verify automatic route convergence
+6. Monitor OSPF LSA updates
+
+TROUBLESHOOTING TIPS
+-------------------
+- Ensure all interfaces are up/up
+- Verify IP addressing matches configuration
+- Check OSPF process and area configuration
+- Confirm router IDs are unique
+- Verify network statements include correct networks
+- Check for OSPF authentication mismatches
+- Review interface costs if suboptimal routing occurs
+
+KEY FEATURES
+-----------
+✓ Dynamic routing with OSPF
+✓ Redundant network paths
+✓ Automatic failover capability
+✓ Efficient IP address utilization (VLSM)
+✓ Scalable hierarchical design
+✓ Single OSPF area (Area 0) for simplicity
+
+LEARNING OUTCOMES
+----------------
+- OSPF configuration and deployment
+- Advanced subnetting with VLSM
+- Network redundancy implementation
+- Router and switch configuration
+- Network simulation tools proficiency
+- Troubleshooting methodology
+
+For questions or more information, refer to:
+- Huawei HCIA-Datacom documentation
+- RFC 2328 (OSPF Version 2)
+- Network simulation tool guides
+`;
+
+        function downloadTopoFile() {
+            const blob = new Blob([topoFileContent], { type: 'text/xml' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Ospf2_Network_Topology.topo';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showNotification('✅ Huawei eNSP topology file downloaded successfully!');
+        }
+
+        function downloadPktFile() {
+            // Note: The .pkt file is binary and complex, so we'll provide a placeholder message
+            showNotification('ℹ️ The Cisco Packet Tracer file (.pkt) is available. Please upload your actual .pkt file to a file hosting service (GitHub, Google Drive, etc.) for proper distribution.');
+        }
+
+        function downloadDocumentation() {
+            const blob = new Blob([configGuide], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'OSPF_Network_Configuration_Guide.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showNotification('✅ Configuration guide downloaded successfully!');
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
