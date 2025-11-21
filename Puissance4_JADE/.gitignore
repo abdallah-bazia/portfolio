@@ -1,0 +1,26 @@
+
+- Put the JADE library (e.g., `jade.jar`) in the `lib/` folder.
+- Keep only source and necessary libraries (omit build/ and IDE temp files).
+
+---
+
+## How to Run
+
+### Option A — Run in NetBeans (recommended)
+1. Open NetBeans → **File → Open Project** → select `Puissance4_JADE` (or create a new project and copy `src/` files into it).  
+2. Add `lib/jade.jar` to the project libraries (Project Properties → Libraries → Add JAR/Folder).  
+3. Run `Puissance4Main.java` as a Java application.  
+4. The JADE GUI and two players (`Joueur1`, `Joueur2`) should start.
+
+### Option B — Run from terminal / command-line
+
+**On Linux / macOS**
+```bash
+# Create bin directory
+mkdir -p bin
+
+# Compile (adjust if your src package structure differs)
+javac -d bin -cp lib/jade.jar src/*.java
+
+# Run (use ':' to separate classpath entries)
+java -cp "lib/jade.jar:bin" Puissance4Main
