@@ -13,4 +13,3 @@ Two agents play against each other and communicate using JADE ACL messages.
 
 ---
 
-## Project Structure
