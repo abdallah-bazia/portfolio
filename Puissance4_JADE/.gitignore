@@ -23,4 +23,4 @@ mkdir -p bin
 javac -d bin -cp lib/jade.jar src/*.java
 
 # Run (use ':' to separate classpath entries)
-java -cp "lib/jade.jar:bin" Puissance4Main
+java -cp "lib/jade.jar:bin" Puissance4Main.
