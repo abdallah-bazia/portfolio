@@ -508,7 +508,7 @@ export default function Portfolio() {
       {/* HERO */}
       <div className="hero">
         <div>
-          <div className="hero-label">— Frontend Developer</div>
+          <div className="hero-label">— Full stack Developer</div>
           <h1 className="hero-name">
             Abdallah<span>Bazia.</span>
           </h1>
