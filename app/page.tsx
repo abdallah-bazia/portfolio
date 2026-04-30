@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 
 export default function Portfolio() {
-  const [activeSection, setActiveSection] = useState("home");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -11,49 +10,86 @@ export default function Portfolio() {
 
   const projects = [
     {
+      title: "ChatFlow",
+      tech: ["Next.js", "TypeScript", "Socket.io", "Node.js", "Tailwind"],
+      desc: "Real-time chat app with multiple rooms, live presence indicators, typing notifications and message history. Built with WebSockets and deployed on Vercel + Render.",
+      icon: "💬",
+      live: "https://chatflow-mgv6.vercel.app",
+      github: "https://github.com/abdallah-bazia/chatflow",
+    },
+    {
+      title: "Weather Dashboard",
+      tech: ["Next.js", "TypeScript", "Tailwind", "OpenWeather API"],
+      desc: "Modern weather dashboard showing real-time weather and 5-day forecasts for any city. Features °C/°F toggle and secure API routing via Next.js server routes.",
+      icon: "⛅",
+      live: "https://weather-dashboard-murex-kappa.vercel.app",
+      github: "https://github.com/abdallah-bazia/weather-dashboard",
+    },
+    {
+      title: "NaaS PoC — Network as a Service",
+      tech: ["Python", "Flask", "REST API", "SDN", "Threading"],
+      desc: "Full Network as a Service platform simulating SDN-based cloud networking. Features multi-tenant provisioning, VNF deployment (firewall, load balancer), and real-time traffic simulation.",
+      icon: "🌐",
+      live: null,
+      github: "https://github.com/abdallah-bazia/cs-projects/tree/main/naas_poc",
+    },
+    {
       title: "Backtracking Sudoku Solver",
       tech: ["Python", "Tkinter"],
       desc: "A Sudoku game with an automated solver using recursive backtracking algorithm and interactive GUI.",
       icon: "⬛",
+      live: null,
+      github: null,
     },
     {
       title: "Puissance4 MAS",
       tech: ["Java", "JADE", "Swing"],
       desc: "Connect Four strategy game featuring an intelligent Multi-Agent System with autonomous decision-making agents.",
       icon: "🔴",
+      live: null,
+      github: null,
     },
     {
       title: "Expert System",
       tech: ["Python", "Tkinter"],
       desc: "Forward and backward chaining inference engine with a clean UI for expert diagnostics and advice.",
       icon: "🧠",
+      live: null,
+      github: null,
     },
     {
       title: "Pascal Compiler Frontend",
       tech: ["C", "Flex", "Bison"],
       desc: "Compiler frontend for a Pascal-like language with lexer, parser, and syntax validation.",
       icon: "⚙️",
+      live: null,
+      github: null,
     },
     {
       title: "Sport Meetings Portal",
       tech: ["PHP", "MySQL"],
       desc: "Web platform connecting sports enthusiasts by location and skill level with event scheduling.",
       icon: "🏃",
+      live: null,
+      github: null,
     },
     {
       title: "Apartment Rental System",
       tech: ["Python", "Kivy", "MySQL"],
       desc: "Desktop app for rental management with dual GUI, tenant data, and payment tracking.",
       icon: "🏠",
+      live: null,
+      github: null,
     },
   ];
 
   const skills = [
-    { category: "Languages", items: ["Python", "Java", "C", "PHP", "JavaScript"] },
-    { category: "Web", items: ["HTML/CSS", "PHP", "MySQL", "Next.js (learning)"] },
+    { category: "Languages", items: ["Python", "Java", "C", "PHP", "JavaScript", "TypeScript"] },
+    { category: "Web", items: ["Next.js", "React", "Node.js", "HTML/CSS", "Tailwind CSS", "Socket.io"] },
+    { category: "Backend", items: ["Flask", "Express", "REST APIs", "WebSockets", "MySQL"] },
     { category: "Mobile", items: ["Kivy", "Android dev"] },
-    { category: "Tools", items: ["Git", "VS Code", "Packet Tracer", "eNSP"] },
-    { category: "CS Concepts", items: ["Algorithms", "OOP", "AI", "Networking", "Security"] },
+    { category: "Tools", items: ["Git", "VS Code", "Vercel", "Render", "Packet Tracer"] },
+    { category: "CS Concepts", items: ["Algorithms", "OOP", "AI", "SDN", "Networking", "Security"] },
   ];
 
   return (
@@ -94,9 +130,7 @@ export default function Portfolio() {
 
         nav {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
+          top: 0; left: 0; right: 0;
           z-index: 100;
           padding: 1.2rem 3rem;
           display: flex;
@@ -115,11 +149,7 @@ export default function Portfolio() {
           color: var(--accent);
         }
 
-        .nav-links {
-          display: flex;
-          gap: 2.5rem;
-          list-style: none;
-        }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
 
         .nav-links a {
           color: var(--muted);
@@ -132,7 +162,6 @@ export default function Portfolio() {
 
         .nav-links a:hover { color: var(--accent); }
 
-        /* HERO */
         .hero {
           min-height: 100vh;
           display: grid;
@@ -167,10 +196,7 @@ export default function Portfolio() {
           transition: all 0.7s ease 0.2s;
         }
 
-        .hero-name span {
-          color: var(--accent);
-          display: block;
-        }
+        .hero-name span { color: var(--accent); display: block; }
 
         .hero-desc {
           color: var(--muted);
@@ -276,8 +302,7 @@ export default function Portfolio() {
         }
 
         .dot {
-          width: 6px;
-          height: 6px;
+          width: 6px; height: 6px;
           background: var(--accent);
           border-radius: 50%;
           animation: pulse 2s infinite;
@@ -288,7 +313,6 @@ export default function Portfolio() {
           50% { opacity: 0.3; }
         }
 
-        /* SECTIONS */
         section {
           max-width: 1200px;
           margin: 0 auto;
@@ -302,11 +326,7 @@ export default function Portfolio() {
           margin-bottom: 4rem;
         }
 
-        .section-num {
-          font-size: 0.7rem;
-          color: var(--accent);
-          letter-spacing: 0.15em;
-        }
+        .section-num { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; }
 
         .section-title {
           font-family: 'Syne', sans-serif;
@@ -315,13 +335,8 @@ export default function Portfolio() {
           letter-spacing: -0.02em;
         }
 
-        .section-line {
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
+        .section-line { flex: 1; height: 1px; background: var(--border); }
 
-        /* PROJECTS */
         .projects-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -334,15 +349,13 @@ export default function Portfolio() {
           padding: 2rem;
           transition: background 0.3s;
           cursor: default;
+          display: flex;
+          flex-direction: column;
         }
 
         .project-card:hover { background: #1a1a1a; }
 
-        .project-icon {
-          font-size: 1.8rem;
-          margin-bottom: 1.2rem;
-          display: block;
-        }
+        .project-icon { font-size: 1.8rem; margin-bottom: 1.2rem; display: block; }
 
         .project-title {
           font-family: 'Syne', sans-serif;
@@ -357,13 +370,10 @@ export default function Portfolio() {
           color: var(--muted);
           line-height: 1.7;
           margin-bottom: 1.5rem;
+          flex: 1;
         }
 
-        .tech-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.4rem;
-        }
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
 
         .tech-tag {
           background: transparent;
@@ -376,12 +386,32 @@ export default function Portfolio() {
           transition: border-color 0.2s, color 0.2s;
         }
 
-        .project-card:hover .tech-tag {
-          border-color: rgba(232,255,71,0.3);
-          color: var(--accent);
+        .project-card:hover .tech-tag { border-color: rgba(232,255,71,0.3); color: var(--accent); }
+
+        .project-links { display: flex; gap: 0.75rem; margin-top: auto; }
+
+        .project-link {
+          font-size: 0.68rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          text-decoration: none;
+          padding: 0.3rem 0.8rem;
+          border: 1px solid var(--border);
+          color: var(--muted);
+          transition: all 0.2s;
         }
 
-        /* SKILLS */
+        .project-link:hover { border-color: var(--accent); color: var(--accent); }
+
+        .project-link.live {
+          background: var(--accent);
+          color: #000;
+          border-color: var(--accent);
+          font-weight: 700;
+        }
+
+        .project-link.live:hover { background: #f0ff60; }
+
         .skills-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -398,37 +428,15 @@ export default function Portfolio() {
           border-bottom: 1px solid var(--border);
         }
 
-        .skill-item {
-          font-size: 0.8rem;
-          color: var(--muted);
-          padding: 0.3rem 0;
-          transition: color 0.2s;
-        }
-
+        .skill-item { font-size: 0.8rem; color: var(--muted); padding: 0.3rem 0; transition: color 0.2s; }
         .skill-item:hover { color: var(--text); }
 
-        /* ABOUT */
-        .about-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
-          align-items: start;
-        }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
 
-        .about-text p {
-          font-size: 0.85rem;
-          color: var(--muted);
-          line-height: 1.9;
-          margin-bottom: 1.2rem;
-        }
-
+        .about-text p { font-size: 0.85rem; color: var(--muted); line-height: 1.9; margin-bottom: 1.2rem; }
         .about-text strong { color: var(--text); }
 
-        .info-list {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+        .info-list { display: flex; flex-direction: column; gap: 1rem; }
 
         .info-row {
           display: flex;
@@ -439,16 +447,9 @@ export default function Portfolio() {
           font-size: 0.78rem;
         }
 
-        .info-key {
-          color: var(--muted);
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          font-size: 0.68rem;
-        }
-
+        .info-key { color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.68rem; }
         .info-val { color: var(--text); }
 
-        /* CONTACT */
         .contact-inner {
           background: var(--card);
           border: 1px solid var(--border);
@@ -465,19 +466,9 @@ export default function Portfolio() {
         }
 
         .contact-title span { color: var(--accent); }
+        .contact-sub { color: var(--muted); font-size: 0.82rem; margin-bottom: 2.5rem; }
 
-        .contact-sub {
-          color: var(--muted);
-          font-size: 0.82rem;
-          margin-bottom: 2.5rem;
-        }
-
-        .contact-links {
-          display: flex;
-          gap: 1rem;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
+        .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
         footer {
           border-top: 1px solid var(--border);
@@ -517,18 +508,18 @@ export default function Portfolio() {
       {/* HERO */}
       <div className="hero">
         <div>
-          <div className="hero-label">— Full Stack Developer</div>
+          <div className="hero-label">— Frontend Developer</div>
           <h1 className="hero-name">
             Abdallah<span>Bazia.</span>
           </h1>
           <p className="hero-desc">
             Computer Science graduate from Jijel, Algeria. I build intelligent software —
-            from AI expert systems and compilers to web platforms and mobile apps.
-            Currently leveling up in React & Next.js.
+            from real-time web apps and AI systems to compilers and network platforms.
+            Proficient in React, Next.js, TypeScript & Node.js.
           </p>
           <div className="hero-cta">
             <a href="#projects" className="btn-primary">View Projects</a>
-            <a href="https://github.com/abdallah-bazia/portfolio" target="_blank" rel="noreferrer" className="btn-ghost">GitHub ↗</a>
+            <a href="https://github.com/abdallah-bazia" target="_blank" rel="noreferrer" className="btn-ghost">GitHub ↗</a>
           </div>
         </div>
 
@@ -538,10 +529,10 @@ export default function Portfolio() {
             Open to opportunities
           </div>
           <div className="stat-card">
-            <div className="stat-number">6+</div>
+            <div className="stat-number">9+</div>
             <div>
               <div className="stat-label">Projects Built</div>
-              <div style={{fontSize:'0.72rem', color:'#444', marginTop:'0.2rem'}}>Across web, desktop & AI</div>
+              <div style={{fontSize:'0.72rem', color:'#444', marginTop:'0.2rem'}}>Web, AI, Networking & more</div>
             </div>
           </div>
           <div className="stat-card">
@@ -577,6 +568,12 @@ export default function Portfolio() {
               <div className="tech-tags">
                 {p.tech.map((t) => <span className="tech-tag" key={t}>{t}</span>)}
               </div>
+              {(p.live || p.github) && (
+                <div className="project-links">
+                  {p.live && <a href={p.live} target="_blank" rel="noreferrer" className="project-link live">Live ↗</a>}
+                  {p.github && <a href={p.github} target="_blank" rel="noreferrer" className="project-link">GitHub ↗</a>}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -611,18 +608,18 @@ export default function Portfolio() {
         <div className="about-grid">
           <div className="about-text">
             <p>
-             I'm a <strong>Computer Science graduate</strong> from Mohamed Seddik Benyahia University
-             of Jijel, Algeria. Currently pursuing a <strong>Master's in Network & Security (M1)</strong>,
-             building on my bachelor's degree completed with distinction.
+              I'm a <strong>Computer Science graduate</strong> from Mohamed Seddik Benyahia University
+              of Jijel, Algeria. Currently pursuing a <strong>Master's in Network & Security (M1)</strong>,
+              building on my bachelor's degree completed with distinction.
             </p>
             <p>
               My background spans <strong>software engineering, artificial intelligence, database systems,
-              and mobile development</strong>. I enjoy working on projects that require both algorithmic
+              and network engineering</strong>. I enjoy working on projects that require both algorithmic
               thinking and clean user-facing design.
             </p>
             <p>
-              I'm currently expanding into <strong>React and Next.js</strong> to bring my full-stack
-              capabilities to modern web development. Fast learner, team player, trilingual.
+              Recently shipped <strong>real-time web apps</strong> using Next.js, TypeScript, Socket.io
+              and REST APIs — deployed and live. Fast learner, team player, trilingual.
             </p>
           </div>
           <div className="info-list">
@@ -655,7 +652,7 @@ export default function Portfolio() {
           <p className="contact-sub">Open to frontend roles, collaborations, and new challenges.</p>
           <div className="contact-links">
             <a href="mailto:abdellahbazia888@gmail.com" className="btn-primary">Send Email</a>
-            <a href="https://github.com/abdallah-bazia/portfolio" target="_blank" rel="noreferrer" className="btn-ghost">GitHub ↗</a>
+            <a href="https://github.com/abdallah-bazia" target="_blank" rel="noreferrer" className="btn-ghost">GitHub ↗</a>
           </div>
         </div>
       </section>
