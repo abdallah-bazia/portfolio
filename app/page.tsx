@@ -10,6 +10,14 @@ export default function Portfolio() {
 
   const projects = [
     {
+      title: "Taskflow — Project Manager",
+      tech: ["Next.js", "TypeScript", "Prisma", "NextAuth.js", "SQLite", "Tailwind"],
+      desc: "Full-stack Trello-inspired project manager with authentication, protected routes, and per-user boards. Features column and task management with a clean dark UI.",
+      icon: "⚡",
+      live: null,
+      github: "https://github.com/abdallah-bazia/taskflow",
+    },
+    {
       title: "ChatFlow",
       tech: ["Next.js", "TypeScript", "Socket.io", "Node.js", "Tailwind"],
       desc: "Real-time chat app with multiple rooms, live presence indicators, typing notifications and message history. Built with WebSockets and deployed on Vercel + Render.",
@@ -86,7 +94,7 @@ export default function Portfolio() {
   const skills = [
     { category: "Languages", items: ["Python", "Java", "C", "PHP", "JavaScript", "TypeScript"] },
     { category: "Web", items: ["Next.js", "React", "Node.js", "HTML/CSS", "Tailwind CSS", "Socket.io"] },
-    { category: "Backend", items: ["Flask", "Express", "REST APIs", "WebSockets", "MySQL"] },
+    { category: "Backend", items: ["Flask", "Express", "REST APIs", "WebSockets", "MySQL", "Prisma", "NextAuth.js"] },
     { category: "Mobile", items: ["Kivy", "Android dev"] },
     { category: "Tools", items: ["Git", "VS Code", "Vercel", "Render", "Packet Tracer"] },
     { category: "CS Concepts", items: ["Algorithms", "OOP", "AI", "SDN", "Networking", "Security"] },
@@ -529,7 +537,7 @@ export default function Portfolio() {
             Open to opportunities
           </div>
           <div className="stat-card">
-            <div className="stat-number">9+</div>
+            <div className="stat-number">10+</div>
             <div>
               <div className="stat-label">Projects Built</div>
               <div style={{fontSize:'0.72rem', color:'#444', marginTop:'0.2rem'}}>Web, AI, Networking & more</div>
