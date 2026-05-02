@@ -9,14 +9,14 @@ export default function Portfolio() {
   }, []);
 
   const projects = [
-    {
-      title: "Taskflow — Project Manager",
-      tech: ["Next.js", "TypeScript", "Prisma", "NextAuth.js", "SQLite", "Tailwind"],
-      desc: "Full-stack Trello-inspired project manager with authentication, protected routes, and per-user boards. Features column and task management with a clean dark UI.",
-      icon: "⚡",
-      live: null,
-      github: "https://github.com/abdallah-bazia/taskflow",
-    },
+   {
+  title: "Taskflow — Project Manager",
+  tech: ["Next.js", "TypeScript", "Prisma", "NextAuth.js", "PostgreSQL", "Tailwind"],
+  desc: "Full-stack Trello-inspired project manager with authentication, protected routes, and per-user boards. Features column and task management with a clean dark UI.",
+  icon: "⚡",
+  live: "https://taskflow-mauve-nine.vercel.app",
+  github: "https://github.com/abdallah-bazia/taskflow",
+},
     {
       title: "ChatFlow",
       tech: ["Next.js", "TypeScript", "Socket.io", "Node.js", "Tailwind"],
